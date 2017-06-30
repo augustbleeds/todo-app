@@ -11,6 +11,15 @@ class TodoApp extends React.Component{
       todos: []
     }
   }
+  removeTodo(index){
+    console.log('todos is', this.state.todos);
+    dummyData.splice(index, 1);
+    // let copyList = this.state.todos.slice();
+    // let newList = copyList.slice(0, index).concat(copyList.slice(index+1));
+    this.setState({
+      todos: dummyData
+    });
+  }
   addTodo(todoText){
     dummyData.push({taskText:todoText, completed:false})
     this.setState({todos: dummyData});
@@ -23,7 +32,7 @@ class TodoApp extends React.Component{
     return(
       <div>
         <InputLine submit={(text) => this.addTodo(text) } />
-        <TodoList todos={this.state.todos} />
+        <TodoList todos={this.state.todos} remove={(index) => this.removeTodo(index)}/>
       </div>
     )
   }

@@ -11,16 +11,27 @@ class TodoApp extends React.Component{
       todos: []
     }
   }
+
+  toggleTodo(index){
+    //modify database
+    dummyData[index].completed = !dummyData[index].completed;
+
+    this.setState({
+      todos: dummyData
+    });
+  }
+
   removeTodo(index){
     console.log('todos is', this.state.todos);
+    // modify database
     dummyData.splice(index, 1);
-    // let copyList = this.state.todos.slice();
-    // let newList = copyList.slice(0, index).concat(copyList.slice(index+1));
+
     this.setState({
       todos: dummyData
     });
   }
   addTodo(todoText){
+    // modify database
     dummyData.push({taskText:todoText, completed:false})
     this.setState({todos: dummyData});
     console.log(this.state.todos);
@@ -32,7 +43,7 @@ class TodoApp extends React.Component{
     return(
       <div>
         <InputLine submit={(text) => this.addTodo(text) } />
-        <TodoList todos={this.state.todos} remove={(index) => this.removeTodo(index)}/>
+        <TodoList toggleComplete={(index) => this.toggleTodo(index)} todos={this.state.todos} remove={(index) => this.removeTodo(index)}/>
       </div>
     )
   }

@@ -1,7 +1,19 @@
 import express from 'express';
 import dbRoutes from './routes/databaseAccess';
+import TodoItem from './models/TodoItem';
+import mongoose from 'mongoose';
 
 const app = express();
+
+mongoose.connection.on('error', function(){
+  console.log('Error connecting to database');
+});
+
+mongoose.connection.on('connected', function(){
+  console.log('Successfully connected to database!');
+})
+
+mongoose.connect(process.env.MONGODB_URI);
 
 // This line makes the build folder publicly available.
 app.use(express.static('build'));

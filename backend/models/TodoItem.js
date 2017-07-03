@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const todoItemSchema = new mongoose.Schema({
-  task: {
+  taskText: {
     type: String,
     require: true
   },

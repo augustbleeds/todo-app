@@ -3,8 +3,8 @@ import TodoItem from '../models/TodoItem';
 
 const router = express.Router();
 
-router.get('/add', (req, res) => {
-  var newItem = new TodoItem({task: 'Do the dishes!'})
+router.post('/add', (req, res) => {
+  var newItem = new TodoItem({taskText: req.body.taskText})
 
   newItem.save()
     .then(response => res.send(response) )

@@ -5,7 +5,7 @@ import TodoList from './TodoList'
 
 const dbUrl = "http://localhost:3000/db";
 
-var dummyData = [{taskText: "Go to Sleep", completed: false}, {taskText: "Eat burgers", completed: false}, {taskText: "lah", completed: true}];
+// var dummyData = [{taskText: "Go to Sleep", completed: false}, {taskText: "Eat burgers", completed: false}, {taskText: "lah", completed: true}];
 
 class TodoApp extends React.Component{
   constructor(props){
@@ -15,23 +15,42 @@ class TodoApp extends React.Component{
     }
   }
 
-  toggleTodo(index){
+  toggleTodo(toggleId){
     //modify database
-    dummyData[index].completed = !dummyData[index].completed;
-
-    this.setState({
-      todos: dummyData
-    });
+    // dummyData[index].completed = !dummyData[index].completed;
+    //
+    // this.setState({
+    //   todos: dummyData
+    // });
+    let self = this;
+    axios.post(dbUrl + '/toggle', {toggleId: toggleId})
+      .then(function(response){
+        // assuming everything is returned
+        self.setState({todos: response.data})
+      })
+      .catch(function(err){
+        console.log('unable to toggle data', err);
+      })
   }
 
-  removeTodo(index){
-    console.log('todos is', this.state.todos);
-    // modify database
-    dummyData.splice(index, 1);
+  removeTodo(removeId){
+    // console.log('todos is', this.state.todos);
+    // // modify database
+    // dummyData.splice(index, 1);
+    //
+    // this.setState({
+    //   todos: dummyData
+    // });
+    let self = this;
+    axios.post(dbUrl + '/remove', {removeId: removeId})
+      .then(function(response){
+        self.setState({todos: response.data});
+      })
+      .catch(function(err){
+        console.log('unable to remove data', err);
+      });
 
-    this.setState({
-      todos: dummyData
-    });
+
   }
   addTodo(todoText){
     // modify database
@@ -53,7 +72,15 @@ class TodoApp extends React.Component{
 
   }
   componentDidMount(){
-    this.setState({todos: dummyData})
+    let self = this;
+    axios.get(dbUrl + '/all')
+      .then(function(response){
+        self.setState({todos: response.data});
+      })
+      .catch(function(err){
+        console.log('error retrieving data from mongoDB', err);
+      });
+    // this.setState({todos: dummyData})
   }
   render(){
     return(
